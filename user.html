@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <title>Mirkaneessaa Kaffaltii</title>
+</head>
+<body>
+    <h2>3. Mirkaneessaa Kaffaltii</h2>
+    <form id="paymentForm">
+        <label>Transaction ID Galchi:</label><br>
+        <input type="text" id="txId" required><br><br>
+
+        <label>Naga'e Upload Godhi:</label><br>
+        <input type="file" id="fileInput" required><br><br>
+
+        <button type="submit" id="btnErgi">Gara Adminitti Ergi</button>
+    </form>
+    <h3 id="status-box" style="color: blue;"></h3>
+
+    <script>
+        const form = document.getElementById('paymentForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Blink/Refresh akka hin goone ittisa!
+
+            document.getElementById('btnErgi').innerText = "Ergamaa jira...";
+            document.getElementById('btnErgi').disabled = true;
+
+            const formData = new FormData();
+            formData.append('username', 'Abu Eyeww'); 
+            formData.append('amount', 100); 
+            formData.append('transactionId', document.getElementById('txId').value);
+            formData.append('receipt', document.getElementById('fileInput').files[0]);
+
+            try {
+                const response = await fetch('http://localhost:5000/api/user/deposit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if(data.success) {
+                    alert(data.message); 
+                    document.getElementById('status-box').innerText = "Haala: Admin hanga mirkaneessutti eegi.";
+                }
+            } catch (error) {
+                alert("Erguun hin danda'amne, irra deebi'ii yaali.");
+                document.getElementById('btnErgi').innerText = "Gara Adminitti Ergi";
+                document.getElementById('btnErgi').disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
+

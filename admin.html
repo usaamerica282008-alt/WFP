@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="or">
+<head>
+    <meta charset="UTF-8">
+    <title>WFP Admin Panel</title>
+    <style>
+        table { width: 100%; border-collapse: collapse; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #007bff; color: white; }
+    </style>
+</head>
+<body>
+    <h2>WFP Bulchiinsa Olaanaa (Admin Panel)</h2>
+    <h3>Kaffaltii Miseensotaa (Deposit Requests)</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Hamma (ETB)</th>
+                <th>Haala</th>
+                <th>Naga'e</th>
+            </tr>
+        </thead>
+        <tbody id="admin-table-body"></tbody>
+    </table>
+
+    <script>
+        async function loadAdminDeposits() {
+            try {
+                const response = await fetch('http://localhost:5000/api/admin/deposits');
+                const deposits = await response.json();
+                const tableBody = document.getElementById('admin-table-body');
+                tableBody.innerHTML = ''; 
+
+                deposits.forEach(row => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${row.username}</td>
+                            <td>${row.amount} ETB</td>
+                            <td style="color: orange; font-weight: bold;">${row.status}</td>
+                            <td><a href="http://localhost:5000/${row.receiptPath}" target="_blank">Naga'e Ilaali</a></td>
+                        </tr>
+                    `;
+                });
+            } catch (error) {
+                console.error("Deetaa fiduun hin danda'amne:", error);
+            }
+        }
+        window.onload = loadAdminDeposits;
+    </script>
+</body>
+</html>
