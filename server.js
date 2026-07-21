@@ -7,6 +7,9 @@ const path = require('path');
 const app = express();
 app.use(express.json());
 app.use(cors());
+// Koodii kana dabili (faayiloota html akka gadi dhiisuuf)
+app.use(express.static(__dirname));
+
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // 1. Database Connect (MongoDB)
